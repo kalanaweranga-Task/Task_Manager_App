@@ -24,6 +24,8 @@ class AddTaskPage extends StatefulWidget {
 
 class _AddTaskPageState extends State<AddTaskPage> {
   DateTime _selectedDate = DateTime.now();
+  String _endtime = "9.30 PM";
+  String _startTime = DateFormat("hh:mm:a").format(DateTime.now()).toString();
    @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,26 +43,60 @@ class _AddTaskPageState extends State<AddTaskPage> {
             ),
             MyInputField(title: "Title", hint: "Enter your title"),
             MyInputField(title: "Note", hint: "Enter your note"),
-            MyInputField(title: "Date", hint: DateFormat.yMd().format(_selectedDate)),
-            
+            MyInputField(title: "Date", hint: DateFormat.yMd().format(_selectedDate),
             widget: IconButton(
-              icon:Icon(Icons.calendar_today_outlined),
+              icon:Icon(Icons.calendar_today_outlined,
               color:Colors.grey
+              ),
+              
               onPressed: (){
                 print("Hi there");
                 _getDateFromUser();
               },
+            )
             ),
             Row(
               children:[
                 Expanded(
                   child: MyInputField(
-                    
+                    title:"Start Date",
+                    hint: _startTime,
+                    widget: IconButton(
+
+                      onPressed: (){
+                        _getTimeFromUser(isStartTime:true);
+                      },
+                      icon: Icon(
+                        Icons.access_time_rounded,
+                        color:Colors.grey ,
+                      
+                      ), 
+                    ) ,
+                  )
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: MyInputField(
+                    title:"End Date",
+                    hint: _endtime,
+                    widget: IconButton(
+
+                      onPressed: (){
+                        _getTimeFromUser(isStartTime:false);
+                      },
+                      icon: Icon(
+                        Icons.access_time_rounded,
+                        color:Colors.grey ,
+                      
+                      ), 
+                    ) ,
                   )
                 )
-
               ],
             )
+            
+         
+            
 
 
           ],
@@ -69,8 +105,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
       )
     );
   }
-}
-    _appBar(BuildContext context){
+
+  _appBar(BuildContext context){
     return AppBar(
       elevation: 0,
       backgroundColor: context.theme.backgroundColor,
@@ -78,7 +114,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         onTap:(){
            Get.back();
         },
-        child: Icon(Icons.arrow_back_ios,
+        child: Icon(Icons.arrow_back,
         size: 20,
         color: Get.isDarkMode ? Colors.white:Colors.black,
         ), 
@@ -94,7 +130,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-
   _getDateFromUser() async {
     DateTime? _pickerDate = await showDatePicker(
       context: context,
@@ -104,13 +139,46 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
     if(_pickerDate != null){
       setState((){
-        DateTime _selectedDate = _pickerDate;
+        _selectedDate = _pickerDate;
         print(_selectedDate);
       });
     }else{
       print("It is null or something is wrong");
     }
   }
+
+  _getTimeFromUser({required bool isStartTime}) async{
+    var _pickedTime= await _showTimePicker();
+    String _formatedTime = _pickedTime.format(context);
+    if (_pickedTime==null) {
+      print("Time Canceld");
+    }else if(isStartTime==true){
+      setState(() {
+        _startTime = _formatedTime;
+      });
+      
+    }else if(isStartTime==false){
+      setState(() {
+        _endtime=_formatedTime;
+      });
+      
+    }
+  }  
+
+  _showTimePicker(){
+     return showTimePicker(
+      initialEntryMode: TimePickerEntryMode.input ,
+      context: context, 
+      initialTime: TimeOfDay(
+        hour: int.parse(_startTime.split(":")[0]), 
+        minute: int.parse(_startTime.split(":")[1].split(" ")[0])));
+  }
+
+}
+    
+
+
+  
 
 
 

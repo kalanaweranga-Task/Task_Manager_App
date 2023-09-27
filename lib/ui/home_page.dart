@@ -51,9 +51,9 @@ final TextStyle headingStyle = TextStyle(
       appBar: _appBar(),
       body: Column(
         children: [
+          // _addTaskBar(),
           _addTaskBar(),
-          _addDateBar(),
-         
+         _addDateBar()
       ],
       ),
     );
