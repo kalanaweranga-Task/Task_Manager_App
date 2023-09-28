@@ -8,7 +8,15 @@ class TaskController extends GetxController {
     super.onReady();
   } 
 
+  var taskList = <Task>[].obs;
+
   Future<int> addTask({Task? task}) async {
     return await DBHelper.insert(task);
+  }
+
+  // get all the task from the database
+  void getTask() async {
+    List<Map<String, dynamic>> tasks = await DBHelper.query();
+    taskList.assignAll(tasks.map((data) => Task.fromJson(data)).toList());
   }
 }
