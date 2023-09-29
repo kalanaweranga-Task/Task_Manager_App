@@ -3,8 +3,10 @@
 // import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:task_management_app/controllers/task_controller.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:task_management_app/services/notification_services.dart';
 import 'package:task_management_app/services/theme_services.dart';
@@ -12,7 +14,8 @@ import 'package:intl/intl.dart';
 // import 'package:task_management_app/ui/theme.dart';
 import 'package:task_management_app/ui/add_task_bar.dart';
 import 'package:task_management_app/ui/theme.dart';
-import 'package:task_management_app/ui/widgets/button.dart'; // Import the intl package
+import 'package:task_management_app/ui/widgets/button.dart';
+import 'package:task_management_app/ui/widgets/task_tile.dart'; // Import the intl package
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,17 +25,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DateTime selectedDate = DateTime.now();
+  final _taskController = Get.put(TaskController());
   late NotifyHelper notifyHelper;
-
-  final TextStyle subHeadingStyle = TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-      color: Get.isDarkMode ? Colors.grey[400] : Colors.grey);
-
-  final TextStyle headingStyle = TextStyle(
-      fontSize: 30,
-      fontWeight: FontWeight.bold,
-      color: Get.isDarkMode ? Colors.white : Colors.black);
 
   @override
   void initState() {
@@ -51,9 +46,42 @@ class _HomePageState extends State<HomePage> {
         children: [
           // _addTaskBar(),
           _addTaskBar(),
-          _addDateBar()
+          _addDateBar(),
+          const SizedBox(height: 10,),
+          _showTask(),
         ],
       ),
+    );
+  }
+
+  _showTask() {
+    return Expanded(
+      child: Obx(() {
+        return ListView.builder(
+            itemCount: _taskController.taskList.length,
+            itemBuilder: (_, index) {
+              print(_taskController.taskList.length);
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 375),
+                child: SlideAnimation(
+                  verticalOffset: 50.0,
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            print("Tapped");
+                          },
+                          child: TaskTile(_taskController.taskList[index]),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            });
+      }),
     );
   }
 
@@ -107,7 +135,12 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            MyButton(label: "+ Task", onTap: () => Get.to(AddTaskPage()))
+            MyButton(
+                label: "+ Task",
+                onTap: () async {
+                  await Get.to(() => AddTaskPage());
+                  _taskController.getTask();
+                })
           ],
         ));
   }
