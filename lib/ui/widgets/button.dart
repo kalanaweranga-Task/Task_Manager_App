@@ -11,15 +11,21 @@ class MyButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child:Container(
-        width: 100,
-        height: 60,
+        alignment: Alignment.center,
+
+        width: 90,
+        height: 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: primaryClr
         ),
         child: Text(
           label,
+          textAlign: TextAlign.center,
+          
           style: const TextStyle(
+            // center the text on the button
+
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),

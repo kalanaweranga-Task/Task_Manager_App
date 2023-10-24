@@ -3,17 +3,15 @@ import 'package:get/get.dart';
 // import 'package:get/get_core/src/get_main.dart';
 
 final TextStyle titleStyle = TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      color:Get.isDarkMode?Colors.white:Colors.black
-);
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: Get.isDarkMode ? Colors.grey[400] : Colors.grey[500]);
 
 final TextStyle subTitleStyle = TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-      color:Get.isDarkMode?Colors.grey[100]:Colors.grey[400]
-);
-
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color:
+        Get.isDarkMode ? const Color.fromARGB(185, 0, 0, 0) : Colors.grey[400]);
 
 class MyInputField extends StatelessWidget {
   final String title;
@@ -21,65 +19,56 @@ class MyInputField extends StatelessWidget {
   final TextEditingController? controller;
   final Widget? widget;
 
-  const MyInputField({Key? key,
+  const MyInputField({
+    Key? key,
     required this.title,
     required this.hint,
     this.controller,
     this.widget,
-  }) : super (key: key);
-
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top:16),
+      margin: const EdgeInsets.only(top: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-          title,
-          style: titleStyle,
+            title,
+            style: titleStyle,
           ),
           Container(
             height: 52,
             margin: const EdgeInsets.only(top: 8.0),
             padding: const EdgeInsets.only(left: 14),
             decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 1.0
-              ),
-              borderRadius: BorderRadius.circular(12)
-            ),
+                border: Border.all(color: Colors.grey, width: 1.0),
+                borderRadius: BorderRadius.circular(12)),
             child: Row(
               children: [
                 Expanded(
-                  child: TextFormField(
-                    readOnly: widget==null?false:true,
-                    autofocus: false,
-                    cursorColor: Get.isDarkMode?Colors.grey[100]:Colors.grey[700],
-                    controller: controller,
-                    style: subTitleStyle,
-                    decoration: InputDecoration(
-                      hintText: hint,
-                      hintStyle: subTitleStyle,
-                      focusedBorder: UnderlineInputBorder(
+                    child: TextFormField(
+                  readOnly: widget == null ? false : true,
+                  autofocus: false,
+                  cursorColor:
+                      Get.isDarkMode ? Colors.grey[100] : Colors.grey[700],
+                  controller: controller,
+                  style: subTitleStyle,
+                  decoration: InputDecoration(
+                    hintText: hint,
+                    hintStyle: subTitleStyle,
+                    focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                          color: context.theme.backgroundColor,
-                          width: 0
-                        )
-                      ),
-                      enabledBorder: UnderlineInputBorder(
+                            color: context.theme.backgroundColor, width: 0)),
+                    enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                          color: context.theme.backgroundColor,
-                          width: 0
-                        )
-                      ),
-                    ),
-                  )),
-                widget==null?Container():Container(child:widget)
+                            color: context.theme.backgroundColor, width: 0)),
+                  ),
+                )),
+                widget == null ? Container() : Container(child: widget)
               ],
-            ) ,
+            ),
           )
         ],
       ),
