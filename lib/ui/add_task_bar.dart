@@ -30,7 +30,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController _noteController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String _endtime = "9.30 PM";
-  String _startTime = DateFormat("hh:mm:a").format(DateTime.now()).toString();
+  String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   List<int> remindList = [
     5,
@@ -91,7 +91,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   children: [
                     Expanded(
                         child: MyInputField(
-                      title: "Start Date",
+                      title: "Start Time",
                       hint: _startTime,
                       widget: IconButton(
                         onPressed: () {
@@ -106,7 +106,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     const SizedBox(width: 12),
                     Expanded(
                         child: MyInputField(
-                      title: "End Date",
+                      title: "End TIme",
                       hint: _endtime,
                       widget: IconButton(
                         onPressed: () {
@@ -293,7 +293,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     DateTime? _pickerDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(2015),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2121));
     if (_pickerDate != null) {
       setState(() {

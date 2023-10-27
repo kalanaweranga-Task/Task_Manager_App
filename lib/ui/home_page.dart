@@ -66,39 +66,23 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (_, index) {
               Task task = _taskController.taskList[index];
               print(task.toJson());
-              if (task.repeat == 'Daily' || task.repeat.toString() == 'None') {
-              String timeString = task.startTime.toString();
-              DateTime parsedTime = DateFormat('h:mm a').parse(timeString);
-              String formattedTime = DateFormat.jm().format(parsedTime);
-              DateTime date = DateFormat.jm().parse(formattedTime);
+              if (task.repeat == 'Daily' ||
+                  task.repeat == 'None' ||
+                  task.repeat == 'Weekly' ||
+                  task.repeat == 'Monthly' ||
+                  task.repeat == 'Annualy') {
+                String timeString = task.startTime.toString();
+                print("1::::$timeString");
+                DateTime parsedTime = DateFormat('h:mm a').parse(timeString);
+                print("2::::$parsedTime");
+                String formattedTime = DateFormat.jm().format(parsedTime);
+                DateTime date = DateFormat.jm().parse(formattedTime);
                 var myTime = DateFormat("HH:mm").format(date);
                 notifyHelper.scheduledNotification(
                     int.parse(myTime.toString().split(":")[0]),
                     int.parse(myTime.toString().split(":")[1]),
                     task);
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _showBottomSheet(context, task);
-                            },
-                            child: TaskTile(task),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }
-              ;
-
-              if (task.date == DateFormat.yMd().format(_selectedDate)) {
+                if (task.date == DateFormat.yMd().format(_selectedDate)) {
                 return AnimationConfiguration.staggeredList(
                   position: index,
                   duration: const Duration(milliseconds: 375),
@@ -121,6 +105,8 @@ class _HomePageState extends State<HomePage> {
               } else {
                 return Container();
               }
+              }
+              
             });
       }),
     );

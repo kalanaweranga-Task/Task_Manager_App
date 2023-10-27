@@ -57,9 +57,8 @@ class NotifyHelper {
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
-            matchDateTimeComponents: DateTimeComponents.time,
-            payload: "{$task.title}|"+"{$task.note}|"
-            );
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: "${task.title}|" + "${task.note}|");
   }
 
   tz.TZDateTime _convertTime(int hour, int minutes) {
@@ -105,7 +104,7 @@ class NotifyHelper {
       title,
       body,
       platformChannelSpecifics,
-      payload: 'Default_Sound',
+      payload: title,
     );
   }
 
@@ -120,13 +119,19 @@ class NotifyHelper {
         );
   }
 
-  Future<void> selectNotification(NotificationResponse? payload) async {
+  Future selectNotification(NotificationResponse? response) async {
+    final String? payload = response?.payload;
     if (payload != null) {
       print('notification payload: $payload');
     } else {
       print("Notification Done");
     }
-    Get.to(() => NotifiedPage(label:payload));
+
+    if (payload == "Theme Change") {
+      print("Nothing to navigate");
+    } else {
+      Get.to(() => NotifiedPage(label: payload));
+    }
   }
 
   Future onDidReceiveLocalNotification(
