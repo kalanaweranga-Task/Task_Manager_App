@@ -49,6 +49,19 @@ class _AddTaskPageState extends State<AddTaskPage> {
     "Annualy",
   ];
 
+  String _selectedCategory = "Other";
+   List<String> categoryList = [
+    "Education",
+    "Sports",
+    "Food",
+    "Meetings",
+    "Friends",
+    "Family",
+    "Groceries",
+    "Fitness",
+    "Other"
+  ];
+
   int _selectedColor = 0;
 
   @override
@@ -177,6 +190,35 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 const SizedBox(
                   height: 18,
                 ),
+                // Category
+                MyInputField(
+                  title: "Category",
+                  hint: _selectedCategory,
+                  widget: DropdownButton(
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.grey,
+                    ),
+                    iconSize: 32,
+                    elevation: 4,
+                    style: subTitleStyle,
+                    underline: Container(),
+                    items: categoryList
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategory = value.toString();
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -215,6 +257,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         remind: _selectedRemind,
         repeat: _selectedRepeat,
         color: _selectedColor,
+        category: _selectedCategory,
         isCompleted: 0,
       ),
     );

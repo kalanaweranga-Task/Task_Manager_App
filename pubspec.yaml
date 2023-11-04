@@ -44,6 +44,7 @@ dependencies:
   # flutter_native_timezone: ^1.0.4
   sqflite: ^2.3.0
   flutter_staggered_animations:
+  filter_list: ^1.0.2
   # flutter_native_timezone:
   
     

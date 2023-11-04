@@ -18,6 +18,7 @@ import 'package:task_management_app/ui/theme.dart';
 import 'package:task_management_app/ui/widgets/button.dart';
 import 'package:task_management_app/ui/widgets/input_field.dart';
 import 'package:task_management_app/ui/widgets/task_tile.dart'; // Import the intl package
+import 'package:filter_list/filter_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showTask() {
-    print("Length::::${_taskController.taskList.length}");
+    // print("Length::::${_taskController.taskList.length}");
     return Expanded(
       child: Obx(() {
         return ListView.builder(
@@ -279,7 +280,6 @@ class _HomePageState extends State<HomePage> {
                   await Get.to(() => AddTaskPage());
                   _taskController.getTask();
                   display_list = _taskController.taskList;
-
                 })
           ],
         ));
@@ -305,6 +305,22 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
+
+  // void openFilterDialog(context) async {
+  //   await FilterListDialog.display<String>(
+  //     context,
+  //     listData: userList,
+  //     selectedListData: selectedUserList,
+  //     choiceChipLabel: (user) => user!.name,
+  //     validateSelectedItem: (, val) => list!.contains(val),
+  //     onApplyButtonClick: (list) {
+  //       setState(() {
+  //         display_list = List.from(list!);
+  //       });
+  //       Navigator.pop(context);
+  //     },
+  //   );
+  // }
 
   void updateList(String value) {
     //search filtering list
@@ -346,10 +362,16 @@ class _HomePageState extends State<HomePage> {
           width: 10,
         ),
         // const CircleAvatar(
-        const Icon(
-          Icons.filter_list,
-          color: Colors.black,
+        TextButton(
+          onPressed: () {
+            Get.to(() => AddTaskPage());
+          },
+          child: Icon(
+            Icons.filter_list,
+            color: Colors.black,
+          ),
         ),
+
         // backgroundImage: AssetImage("images/profile.jpg"),
         // ),
         const SizedBox(
