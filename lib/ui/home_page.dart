@@ -29,15 +29,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DateTime _selectedDate = DateTime.now();
   final _taskController = Get.put(TaskController());
+  List<Task> display_list = [];
+
   late NotifyHelper notifyHelper;
 
   @override
   void initState() {
+    // setState(() async{
+    _taskController.getTask();
+    display_list = _taskController.taskList;
+
+    // });
     super.initState();
     notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
   }
+  //  List<Task> display_list = List.from(Get.put(_TaskController()).taskList);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +60,12 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 10,
           ),
+          // _taskController.taskList.length == 0 ?
+          //   Center(
+          //     child: Text("No Task Found",style: titleStyle,),
+          //   )
+
+          // :
           _showTask(),
         ],
       ),
@@ -59,6 +73,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showTask() {
+    print("Length::::${_taskController.taskList.length}");
     return Expanded(
       child: Obx(() {
         return ListView.builder(
@@ -72,9 +87,9 @@ class _HomePageState extends State<HomePage> {
                   task.repeat == 'Monthly' ||
                   task.repeat == 'Annualy') {
                 String timeString = task.startTime.toString();
-                print("1::::$timeString");
+                // print("1::::$timeString");
                 DateTime parsedTime = DateFormat('h:mm a').parse(timeString);
-                print("2::::$parsedTime");
+                // print("2::::$parsedTime");
                 String formattedTime = DateFormat.jm().format(parsedTime);
                 DateTime date = DateFormat.jm().parse(formattedTime);
                 var myTime = DateFormat("HH:mm").format(date);
@@ -83,30 +98,29 @@ class _HomePageState extends State<HomePage> {
                     int.parse(myTime.toString().split(":")[1]),
                     task);
                 if (task.date == DateFormat.yMd().format(_selectedDate)) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _showBottomSheet(context, task);
-                            },
-                            child: TaskTile(task),
-                          )
-                        ],
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _showBottomSheet(context, task);
+                              },
+                              child: TaskTile(task),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              } else {
-                return Container();
+                  );
+                } else {
+                  return Container();
+                }
               }
-              }
-              
             });
       }),
     );
@@ -264,9 +278,44 @@ class _HomePageState extends State<HomePage> {
                 onTap: () async {
                   await Get.to(() => AddTaskPage());
                   _taskController.getTask();
+                  display_list = _taskController.taskList;
+
                 })
           ],
         ));
+  }
+
+  _searchBox() {
+    return Container(
+        width: MediaQuery.of(context).size.width * 0.65,
+        child: TextField(
+          onChanged: (value) => updateList(value),
+          style: TextStyle(color: Colors.grey),
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
+            hintText: "Search",
+            hintStyle: const TextStyle(color: Colors.grey),
+            prefixIcon: const Icon(
+              Icons.search,
+              color: Colors.grey,
+            ),
+          ),
+        ));
+  }
+
+  void updateList(String value) {
+    //search filtering list
+    // print("VALUE::::" + value);
+    // print("LENGTH_LIST:::: ${display_list.length}");
+    setState(() {
+      _taskController.taskList = RxList<Task>.from(display_list.where(
+          (element) =>
+              element.title!.toLowerCase().contains(value.toLowerCase())));
+      print(_taskController.taskList.length);
+    });
   }
 
   _appBar() {
@@ -291,11 +340,19 @@ class _HomePageState extends State<HomePage> {
           color: Get.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
-      actions: const [
-        CircleAvatar(
-          backgroundImage: AssetImage("images/profile.jpg"),
+      actions: [
+        _searchBox(),
+        const SizedBox(
+          width: 10,
         ),
-        SizedBox(
+        // const CircleAvatar(
+        const Icon(
+          Icons.filter_list,
+          color: Colors.black,
+        ),
+        // backgroundImage: AssetImage("images/profile.jpg"),
+        // ),
+        const SizedBox(
           width: 20,
         )
       ],
