@@ -6,6 +6,7 @@ class Task {
   String? startTime;
   String? endTime;
   int? color;
+  String? category;
   int? remind;
   String? repeat;
   int? isCompleted;
@@ -18,6 +19,7 @@ class Task {
     this.startTime,
     this.endTime,
     this.color,
+    this.category,
     this.remind,
     this.repeat,
     this.isCompleted,
@@ -31,6 +33,7 @@ class Task {
     startTime = json['startTime'];
     endTime = json['endTime'];
     color = json['color'];
+    category = json['category'];
     remind = json['remind'];
     repeat = json['repeat'];
     isCompleted = json['isCompleted'];
@@ -45,6 +48,7 @@ class Task {
     data['startTime'] = startTime;
     data['endTime'] = endTime;
     data['color'] = color;
+    data['category'] = category;
     data['remind'] = remind;
     data['repeat'] = repeat;
     data['isCompleted'] = isCompleted;

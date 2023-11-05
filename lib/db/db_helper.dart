@@ -18,7 +18,7 @@ class DBHelper {
         onCreate: ((db, version) {
           print("Creating a new one");
           return db.execute(
-            'CREATE TABLE $_tableName(id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, note TEXT, date TEXT, startTime TEXT, endTime TEXT, color INTEGER, remind INTEGER, repeat STRING, isCompleted INTEGER)',
+            'CREATE TABLE $_tableName(id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, note TEXT, date TEXT, startTime TEXT, endTime TEXT, color INTEGER, category STRING, remind INTEGER, repeat STRING, isCompleted INTEGER)',
           );
         }),
       );
